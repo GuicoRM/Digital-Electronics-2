@@ -2,16 +2,17 @@
  * Proyecto1.c
  *
  * Created: 29/09/2020 16:24:34
- * Author : Guillermo Cortés Orellana (@GuiRM on GitHub)
+ * Author : Guillermo Cortés Orellana (@GuicoRM on GitHub)
  */ 
 
 /***********************************************************************
  * 
- * Blink a LED and use function from the delay library.
+ * Blink "DE2" a LED and use function from the delay library.
  * ATmega328P (Arduino Uno), 16 MHz, AVR 8-bit Toolchain 3.6.2
  *
- * Copyright (c) 2018-2020 Tomas Fryza
- * Dept. of Radio Electronics, Brno University of Technology, Czechia
+ * Copyright (c) 2020 Guillermo Cortés Orellana
+ 
+ * Spaniard student at Brno University of Technology, Czechia
  * This work is licensed under the terms of the MIT license.
  * 
  **********************************************************************/
