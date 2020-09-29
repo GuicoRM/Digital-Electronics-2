@@ -1,4 +1,4 @@
-# Digital-electronics-2
+# Digital-Electronics-2
 Repository for the course ['*Digital Electronics 2*'](https://moodle.vutbr.cz/course/view.php?id=229631)
 
 ## Autor and other relevant information
