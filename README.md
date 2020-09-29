@@ -1,1 +1,23 @@
-# Digital-Electronics-2
+# Digital-electronics-2
+Repository for the course ['*Digital Electronics 2*'](https://moodle.vutbr.cz/course/view.php?id=229631)
+
+## Autor and other relevant information
+Guillermo Cortés Orellana. **BUT-FEEC**.
+:bowtie:
+
+#### Temary 
+- [x] 1. Git version-control system, AVR tools
+- [ ] 2. Coming...
+- [ ] 3. Coming...
+- [ ] 4. Coming...
+- [ ] 5. Coming...
+- [ ] 6. Coming...
+- [ ] 7. Coming...
+- [ ] 8. Coming...
+
+## Headers
+## Emphasis (italics, bold)
+## Lists (ordered, unordered)
+## Links
+## Table
+## Listing of C source code
