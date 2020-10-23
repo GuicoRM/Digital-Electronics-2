@@ -64,23 +64,13 @@ int main(void)
 	GPIO_config_input_pullup(&DDRD, BTN);	
 	
 
-    /* Configuration of TIMER/COUNTER */
+    /* Configuration of TIMER/COUNTER */	
 
     /*********************************TIMER/COUNTER1**************************************/
 	/* Configuration of 16-bit Timer/Counter1
      * Set prescaler and enable overflow interrupt */
-		
-		if(GPIO_read(&PIND, BTN) == 1){
-			
-			TIM1_overflow_262ms();
-			TIM1_overflow_interrupt_enable();
-			
-		}else{
-			
-			TIM1_overflow_1s();
-			TIM1_overflow_interrupt_enable();
-			
-		}
+	
+	// Lo configuro dentro del while(1) para que así tenga efecto el pulsador
 	
     // Enables interrupts by setting the global interrupt mask
     sei();
@@ -90,6 +80,20 @@ int main(void)
     {
         /* Empty loop. All subsequent operations are performed exclusively 
          * inside interrupt service routines ISRs */
+		
+		// Debería ser un loop vacío, pero al utilizar el pulsador en mi diseño, lo he incluído dentro
+		
+		if(GPIO_read(&PIND, BTN) == 1){ 
+			
+			TIM1_overflow_262ms();
+			TIM1_overflow_interrupt_enable();
+			
+		}else{
+		
+			TIM1_overflow_1s();
+			TIM1_overflow_interrupt_enable();
+		
+		}
     }
 
     // Will never reach this
@@ -131,7 +135,6 @@ ISR(TIMER1_OVF_vect)
 		GPIO_toggle(&PORTB, LED_D4);
 		a++;
 		
-	}
-		
+	}		
 
 }
