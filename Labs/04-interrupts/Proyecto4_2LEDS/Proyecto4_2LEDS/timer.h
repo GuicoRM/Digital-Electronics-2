@@ -46,12 +46,12 @@
  * @brief Defines prescaler CPU frequency values for TIMER/COUNTER0.
  * @note  F_CPU = 16 MHz
  */
-#define TIM0_stop()             TCCR0B &= ~((1<<CS02) | (1<<CS01) | (1<<CS00));          // 000
-#define TIM0_overflow_16us()    TCCR0B &= ~((1<<CS02) | (1<<CS01)); TCCR0B |= (1<<CS00); // 001
-#define TIM0_overflow_128us()   TCCR0B &= ~((1<<CS02) | (1<<CS00)); TCCR0B |= (1<<CS01); // 010
-#define TIM0_overflow_1s()      TCCR0B &= ~(1<<CS02); TCCR0B |= (1<<CS01) | (1<<CS00);   // 011
-#define TIM0_overflow_4s()      TCCR0B &= ~((1<<CS01) | (1<<CS00)); TCCR0B |= (1<<CS02); // 100
-#define TIM0_overflow_16s()     TCCR0B &= ~(1<<CS01); TCCR0B |= (1<<CS02) | (1<<CS00);   // 101
+#define TIM0_stop()             TCCR0B &= ~((1<<CS02) | (1<<CS01) | (1<<CS00));          // 000 -> STOP
+#define TIM0_overflow_16us()    TCCR0B &= ~((1<<CS02) | (1<<CS01)); TCCR0B |= (1<<CS00); // 001 -> 1
+#define TIM0_overflow_128us()   TCCR0B &= ~((1<<CS02) | (1<<CS00)); TCCR0B |= (1<<CS01); // 010 -> 8
+#define TIM0_overflow_1ms()     TCCR0B &= ~(1<<CS02); TCCR0B |= (1<<CS01) | (1<<CS00);   // 011 -> 64
+#define TIM0_overflow_4ms()     TCCR0B &= ~((1<<CS01) | (1<<CS00)); TCCR0B |= (1<<CS02); // 100 -> 256
+#define TIM0_overflow_16ms()    TCCR0B &= ~(1<<CS01); TCCR0B |= (1<<CS02) | (1<<CS00);   // 101 -> 1024
 
 /**
  * @brief Defines interrupt enable/disable modes for TIMER/COUNTER0.
@@ -65,12 +65,12 @@
  * @brief Defines prescaler CPU frequency values for TIMER/COUNTER1.
  * @note  F_CPU = 16 MHz
  */
-#define TIM1_stop()             TCCR1B &= ~((1<<CS12) | (1<<CS11) | (1<<CS10));          // 000
-#define TIM1_overflow_4ms()     TCCR1B &= ~((1<<CS12) | (1<<CS11)); TCCR1B |= (1<<CS10); // 001
-#define TIM1_overflow_33ms()    TCCR1B &= ~((1<<CS12) | (1<<CS10)); TCCR1B |= (1<<CS11); // 010
-#define TIM1_overflow_262ms()   TCCR1B &= ~(1<<CS12); TCCR1B |= (1<<CS11) | (1<<CS10);   // 011
-#define TIM1_overflow_1s()      TCCR1B &= ~((1<<CS11) | (1<<CS10)); TCCR1B |= (1<<CS12); // 100
-#define TIM1_overflow_4s()      TCCR1B &= ~(1<<CS11); TCCR1B |= (1<<CS12) | (1<<CS10);   // 101
+#define TIM1_stop()             TCCR1B &= ~((1<<CS12) | (1<<CS11) | (1<<CS10));          // 000 -> STOP
+#define TIM1_overflow_4ms()     TCCR1B &= ~((1<<CS12) | (1<<CS11)); TCCR1B |= (1<<CS10); // 001 -> 1
+#define TIM1_overflow_33ms()    TCCR1B &= ~((1<<CS12) | (1<<CS10)); TCCR1B |= (1<<CS11); // 010 -> 8
+#define TIM1_overflow_262ms()   TCCR1B &= ~(1<<CS12); TCCR1B |= (1<<CS11) | (1<<CS10);   // 011 -> 64
+#define TIM1_overflow_1s()      TCCR1B &= ~((1<<CS11) | (1<<CS10)); TCCR1B |= (1<<CS12); // 100 -> 256
+#define TIM1_overflow_4s()      TCCR1B &= ~(1<<CS11); TCCR1B |= (1<<CS12) | (1<<CS10);   // 101 -> 1024
 
 /**
  * @brief Defines interrupt enable/disable modes for TIMER/COUNTER1.
@@ -84,14 +84,14 @@
  * @brief Defines prescaler CPU frequency values for TIMER/COUNTER2.
  * @note  F_CPU = 16 MHz
  */
-#define TIM2_stop()             TCCR2B &= ~((1<<CS22) | (1<<CS21) | (1<<CS20));          // 000
-#define TIM2_overflow_16us()    TCCR2B &= ~((1<<CS22) | (1<<CS21)); TCCR2B |= (1<<CS20); // 001
-#define TIM2_overflow_128us()   TCCR2B &= ~((1<<CS22) | (1<<CS20)); TCCR2B |= (1<<CS21); // 010
-#define TIM2_overflow_512us()   TCCR2B &= ~(1<<CS22); TCCR2B |= (1<<CS21) | (1<<CS20);   // 011
-#define TIM2_overflow_1s()      TCCR2B &= ~((1<<CS21) | (1<<CS20)); TCCR2B |= (1<<CS22); // 100
-#define TIM2_overflow_2s()      TCCR2B &= ~(1<<CS21); TCCR2B |= (1<<CS22) | (1<<CS20);   // 101
-#define TIM2_overflow_4s()      TCCR2B |=  (1<<CS22) | (1<<CS21); TCCR2B &= ~(1<<CS20);  // 110
-#define TIM2_overflow_16s()     TCCR2B |=  (1<<CS22) | (1<<CS21) | (1<<CS20);            // 111
+#define TIM2_stop()             TCCR2B &= ~((1<<CS22) | (1<<CS21) | (1<<CS20));          // 000 -> STOP
+#define TIM2_overflow_16us()    TCCR2B &= ~((1<<CS22) | (1<<CS21)); TCCR2B |= (1<<CS20); // 001 -> 1
+#define TIM2_overflow_128us()   TCCR2B &= ~((1<<CS22) | (1<<CS20)); TCCR2B |= (1<<CS21); // 010 -> 8
+#define TIM2_overflow_512us()   TCCR2B &= ~(1<<CS22); TCCR2B |= (1<<CS21) | (1<<CS20);   // 011 -> 32
+#define TIM2_overflow_1ms()     TCCR2B &= ~((1<<CS21) | (1<<CS20)); TCCR2B |= (1<<CS22); // 100 -> 64
+#define TIM2_overflow_2ms()     TCCR2B &= ~(1<<CS21); TCCR2B |= (1<<CS22) | (1<<CS20);   // 101 -> 128
+#define TIM2_overflow_4ms()     TCCR2B |=  (1<<CS22) | (1<<CS21); TCCR2B &= ~(1<<CS20);  // 110 -> 256
+#define TIM2_overflow_16ms()    TCCR2B |=  (1<<CS22) | (1<<CS21) | (1<<CS20);            // 111 -> 1024
 
 /**
  * @brief Defines interrupt enable/disable modes for TIMER/COUNTER0.

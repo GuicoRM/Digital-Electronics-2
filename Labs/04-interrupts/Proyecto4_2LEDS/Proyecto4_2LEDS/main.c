@@ -58,7 +58,7 @@ int main(void)
 	/*********************************TIMER/COUNTER2**************************************/
 	/* Configuration of 16-bit Timer/Counter1
      * Set prescaler and enable overflow interrupt */
-    TIM2_overflow_4s();
+    TIM2_overflow_4ms();
     TIM2_overflow_interrupt_enable();
 
 
