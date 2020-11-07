@@ -67,7 +67,12 @@ void SEG_update_shift_regs(uint8_t segments, uint8_t position);
 void SEG_clear (void);
 
 /**
- * @brief Generate one CLK signal period with a duration of 2 us 
+ * @brief Generate one CLK signal period with a duration of 2 us
+ *
+ * @note  Frequency of the signal = f = 500kHz = 500000Hz  
+ * Period of the signal = T = 1/f = 1/500000 = 2 us
+ * T(ON) = 1 us ; T(OFF) = 1 us
+ * 
  */
 void SEG_clk_2us(void);
 

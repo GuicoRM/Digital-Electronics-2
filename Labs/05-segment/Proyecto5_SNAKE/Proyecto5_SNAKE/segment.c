@@ -203,13 +203,14 @@ void SEG_clear(void){
 void SEG_clk_2us(void){
 	
 	while(1){
-		GPIO_write_low(&PORTD, SEGMENT_CLK);  
-		_delay_us(0.625);						// Due to frequency of the signal = 800kHz,
-												// period = 1025 us -> T(ON) = 0.625 us	
-			
+		GPIO_write_low(&PORTD, SEGMENT_CLK);	// Due to frequency of the signal = 500kHz,
+												// period = 2 us -> T(ON) = 1 us
+		_delay_us(1);
+		
+		
 		GPIO_write_high(&PORTD, SEGMENT_CLK);	// Due to frequency of the signal = 800kHz,
-												// period = 1025 us -> T(OFF) = 0.625 us  
-		_delay_us(0.625);
+												// period = 2 us -> T(OFF) = 1 us
+		_delay_us(1);
 	}
 	
 	
