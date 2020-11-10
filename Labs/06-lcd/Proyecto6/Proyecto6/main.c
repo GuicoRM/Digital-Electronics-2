@@ -7,7 +7,7 @@
 
 /***********************************************************************
  * 
- * Stopwatch with LCD display output.
+ * Test with LCD display output.
  * ATmega328P (Arduino Uno), 16 MHz, AVR 8-bit Toolchain 3.6.2
  *
  * Copyright (c) Guillermo Cortés
@@ -23,10 +23,13 @@
 #include "lcd.h"            // Peter Fleury's LCD library
 #include <stdlib.h>         // C library. Needed for conversion function
 
+/* Defines -----------------------------------------------------------*/
+#define COL1 1
+
 /* Function definitions ----------------------------------------------*/
 /**
- * Main function where the program execution begins. Update stopwatch
- * value on LCD display when 8-bit Timer/Counter2 overflows.
+ * Main function where the program execution begins. Show 
+ * on LCD display the sentence: "LCD Test!".
  */
 int main(void)
 {
@@ -34,7 +37,7 @@ int main(void)
     lcd_init(LCD_DISP_ON_CURSOR);
 
     // Put string(s) at LCD display
-    lcd_gotoxy(1, 0);
+    lcd_gotoxy(COL1, 0);
     lcd_puts("LCD Test");
     lcd_putc('!');
 

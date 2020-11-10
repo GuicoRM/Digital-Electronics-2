@@ -23,6 +23,10 @@
 #include "lcd.h"            // Peter Fleury's LCD library
 #include <stdlib.h>         // C library. Needed for conversion function
 
+/* Defines -----------------------------------------------------------*/
+#define COL1 1
+#define COL2 11
+
 /* Function definitions ----------------------------------------------*/
 /**
  * Main function where the program execution begins. Update stopwatch
@@ -34,13 +38,13 @@ int main(void)
     lcd_init(LCD_DISP_ON);
 
     // Put string(s) at LCD display
-    lcd_gotoxy(1, 0);
+    lcd_gotoxy(COL1, 0);
     lcd_puts("00:00.0");
-	lcd_gotoxy(11, 0);
+	lcd_gotoxy(COL2, 0);
 	lcd_putc('0');
-	lcd_gotoxy(1, 1);
+	lcd_gotoxy(COL1, 1);
 	lcd_putc('b');
-	lcd_gotoxy(11,1);
+	lcd_gotoxy(COL2,1);
 	lcd_putc('c');
 
     // Configure 8-bit Timer/Counter2 for Stopwatch
@@ -71,7 +75,7 @@ int main(void)
 ISR(TIMER2_OVF_vect)
 {
 	static uint8_t number_of_overflows = 0;
-	static uint8_t tens = 0;		// Tenths of a second
+	static uint8_t tens = 1;		// Tenths of a second
 	static uint8_t secs = 0;        // Seconds
 	static uint8_t mins = 0;        // Minutes
 	
@@ -83,23 +87,17 @@ ISR(TIMER2_OVF_vect)
 	if (number_of_overflows >= 6)
 	{
 		// Do this every 6 x 16 ms = 100 ms
-		number_of_overflows = 0;
-
-		/*TENTHS*/
-		itoa(tens, lcd_string, 10);     // Convert decimal value to string
-		lcd_gotoxy(7, 0);
-		lcd_puts(lcd_string);
-		
-		tens++;
+		number_of_overflows = 0;		
 		
 		if(tens >= 10){
+			
 			tens = 0;
 			
 			secs++;
 			
 			/*SQUARE OF SECONDS*/
 			itoa(secs*secs, lcd_sqr, 10);     // Convert decimal value to string
-			lcd_gotoxy(11, 0);
+			lcd_gotoxy(COL2, 0);
 			lcd_puts(lcd_sqr);
 			
 			/*SECONDS*/
@@ -108,7 +106,7 @@ ISR(TIMER2_OVF_vect)
 				lcd_gotoxy(4, 0);
 				lcd_puts(lcd_string);
 				
-				}else{
+			}else{
 				itoa(secs, lcd_string, 10);     // Convert decimal value to string
 				lcd_gotoxy(5, 0);
 				lcd_puts(lcd_string);
@@ -118,12 +116,13 @@ ISR(TIMER2_OVF_vect)
 			/*MINUTES*/
 			if (secs >= 60){
 				secs = 0;
+				
 				itoa(secs, lcd_string, 10);     // Convert decimal value to string
 				lcd_gotoxy(4, 0);
 				lcd_puts(lcd_string);
 				
 				itoa(secs*secs, lcd_sqr, 10);     // Convert decimal value to string
-				lcd_gotoxy(11, 0);
+				lcd_gotoxy(COL2, 0);
 				lcd_puts(lcd_sqr);
 				
 				lcd_gotoxy(12, 0);
@@ -134,27 +133,36 @@ ISR(TIMER2_OVF_vect)
 				lcd_data(0x20);
 				
 				mins++;
+				
 				if (mins >= 60){
 					mins = 0;
 					
-					lcd_gotoxy(1, 0);
+					lcd_gotoxy(COL1, 0);
 					lcd_putc('0');
 					lcd_gotoxy(2, 0);
 					lcd_putc('0');
 					
-					}else if (mins >= 10){
+				}else if (mins >= 10){
 					itoa(mins, lcd_string, 10);     // Convert decimal value to string
-					lcd_gotoxy(1, 0);
+					lcd_gotoxy(COL1, 0);
 					lcd_puts(lcd_string);
-					}else {
+					
+				}else {
 					itoa(mins, lcd_string, 10);     // Convert decimal value to string
 					lcd_gotoxy(2, 0);
 					lcd_puts(lcd_string);
 				}
 				
-			}
+			}		
 			
 		}
+		
+		/*TENTHS*/
+		itoa(tens, lcd_string, 10);     // Convert decimal value to string
+		lcd_gotoxy(7, 0);
+		lcd_puts(lcd_string);
+		
+		tens++;
 		
 	}
 }

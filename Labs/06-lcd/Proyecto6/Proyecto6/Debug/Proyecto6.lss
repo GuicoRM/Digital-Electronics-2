@@ -325,7 +325,7 @@ void lcd_init(uint8_t dispAttr)
  1ea:	08 95       	ret
 
 000001ec <main>:
- * value on LCD display when 8-bit Timer/Counter2 overflows.
+ * on LCD display the sentence: "LCD Test!".
  */
 int main(void)
 {
@@ -335,7 +335,7 @@ int main(void)
  1ee:	0e 94 b4 00 	call	0x168	; 0x168 <lcd_init>
 
     // Put string(s) at LCD display
-    lcd_gotoxy(1, 0);
+    lcd_gotoxy(COL1, 0);
  1f2:	60 e0       	ldi	r22, 0x00	; 0
  1f4:	81 e0       	ldi	r24, 0x01	; 1
  1f6:	0e 94 92 00 	call	0x124	; 0x124 <lcd_gotoxy>
