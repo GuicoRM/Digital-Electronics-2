@@ -11,6 +11,5 @@ Guillermo Cortés Orellana. **BUT-FEEC**.
 - [x] 3. User library for GPIO control
 - [x] 4. Interrupts, timers
 - [x] 5. Display devices, 7-segment display
-- [ ] 6. Display devices, LCD display
-- [ ] 7. Coming...
-- [ ] 8. Coming...
+- [x] 6. Display devices, LCD display
+- [x] 7. ADC and UART serial communication
