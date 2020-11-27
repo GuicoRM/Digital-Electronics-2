@@ -3,29 +3,29 @@ Final_Project.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00800100  00000154  2**0
+  0 .data         00000000  00800100  00800100  000001a2  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000100  00000000  00000000  00000054  2**1
+  1 .text         0000014e  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000030  00000000  00000000  00000154  2**0
+  2 .comment      00000030  00000000  00000000  000001a2  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000184  2**2
+  3 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000001d4  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000070  00000000  00000000  000001c4  2**0
+  4 .debug_aranges 00000078  00000000  00000000  00000214  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   000009a1  00000000  00000000  00000234  2**0
+  5 .debug_info   00000934  00000000  00000000  0000028c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00000742  00000000  00000000  00000bd5  2**0
+  6 .debug_abbrev 000006f4  00000000  00000000  00000bc0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   000003ae  00000000  00000000  00001317  2**0
+  7 .debug_line   0000035c  00000000  00000000  000012b4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  000000a8  00000000  00000000  000016c8  2**2
+  8 .debug_frame  00000100  00000000  00000000  00001610  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    0000048f  00000000  00000000  00001770  2**0
+  9 .debug_str    00000450  00000000  00000000  00001710  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    0000010a  00000000  00000000  00001bff  2**0
+ 10 .debug_loc    0000018d  00000000  00000000  00001b60  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000050  00000000  00000000  00001d09  2**0
+ 11 .debug_ranges 00000058  00000000  00000000  00001ced  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -44,7 +44,7 @@ Disassembly of section .text:
   28:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
   2c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
   30:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  34:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  34:	0c 94 7e 00 	jmp	0xfc	; 0xfc <__vector_13>
   38:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
   3c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
   40:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
@@ -66,7 +66,7 @@ Disassembly of section .text:
   70:	de bf       	out	0x3e, r29	; 62
   72:	cd bf       	out	0x3d, r28	; 61
   74:	0e 94 65 00 	call	0xca	; 0xca <main>
-  78:	0c 94 7e 00 	jmp	0xfc	; 0xfc <_exit>
+  78:	0c 94 a5 00 	jmp	0x14a	; 0x14a <_exit>
 
 0000007c <__bad_interrupt>:
   7c:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -127,50 +127,97 @@ void GPIO_toggle(volatile uint8_t *reg_name, uint8_t pin_num)
   c8:	08 95       	ret
 
 000000ca <main>:
+#include "timer.h"          // Timer library for AVR-GCC
 
 int main(void)
 {
-	/* PIN PB5 */
-	// Set pin as OUTPUT in Data Direction Register... (PIN -> OUTPUT)
-	GPIO_config_output(&DDRB, OUTPUT_MICRO);
+	/* CONFIGURATION OF PIN PB5 -> OUTPUT_MICRO */	
+	GPIO_config_output(&DDRB, OUTPUT_MICRO);		// Set pin as OUTPUT in Data Direction Register... (PIN -> OUTPUT)
   ca:	65 e0       	ldi	r22, 0x05	; 5
   cc:	84 e2       	ldi	r24, 0x24	; 36
   ce:	90 e0       	ldi	r25, 0x00	; 0
   d0:	0e 94 40 00 	call	0x80	; 0x80 <GPIO_config_output>
-	GPIO_write_low(&PORTB, OUTPUT_MICRO); // LED off because active HIGH
+	GPIO_write_low(&PORTB, OUTPUT_MICRO);			// OUTPUT = '0'
   d4:	65 e0       	ldi	r22, 0x05	; 5
   d6:	85 e2       	ldi	r24, 0x25	; 37
   d8:	90 e0       	ldi	r25, 0x00	; 0
   da:	0e 94 4c 00 	call	0x98	; 0x98 <GPIO_write_low>
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
+	/* Configuration of TIMER */
+	
+	/*********************************TIMER/COUNTER1**************************************/
+	/* Configuration of 16-bit Timer/Counter1
+     * Set prescaler and enable overflow interrupt */
+    TIM1_overflow_1s();
+  de:	e1 e8       	ldi	r30, 0x81	; 129
+  e0:	f0 e0       	ldi	r31, 0x00	; 0
+  e2:	80 81       	ld	r24, Z
+  e4:	8c 7f       	andi	r24, 0xFC	; 252
+  e6:	80 83       	st	Z, r24
+  e8:	80 81       	ld	r24, Z
+  ea:	84 60       	ori	r24, 0x04	; 4
+  ec:	80 83       	st	Z, r24
+    TIM1_overflow_interrupt_enable();
+  ee:	ef e6       	ldi	r30, 0x6F	; 111
+  f0:	f0 e0       	ldi	r31, 0x00	; 0
+  f2:	80 81       	ld	r24, Z
+  f4:	81 60       	ori	r24, 0x01	; 1
+  f6:	80 83       	st	Z, r24
+	
+	// Enables interrupts by setting the global interrupt mask
+	sei();
+  f8:	78 94       	sei
+  fa:	ff cf       	rjmp	.-2      	; 0xfa <main+0x30>
 
-	__builtin_avr_delay_cycles(__ticks_dc);
-  de:	2f ef       	ldi	r18, 0xFF	; 255
-  e0:	89 e6       	ldi	r24, 0x69	; 105
-  e2:	98 e1       	ldi	r25, 0x18	; 24
-  e4:	21 50       	subi	r18, 0x01	; 1
-  e6:	80 40       	sbci	r24, 0x00	; 0
-  e8:	90 40       	sbci	r25, 0x00	; 0
-  ea:	e1 f7       	brne	.-8      	; 0xe4 <main+0x1a>
-  ec:	00 c0       	rjmp	.+0      	; 0xee <main+0x24>
-  ee:	00 00       	nop
-    {
-		 // Pause several milliseconds
-		 _delay_ms(BLINK_DELAY);
+000000fc <__vector_13>:
+/* Interrupt service routines ----------------------------------------*/
+/**
+ * ISR starts when Timer/Counter1 overflows. Switch OUTPUT_MICRO 
+ * Multi-function shield. */
+ISR(TIMER1_OVF_vect)
+{
+  fc:	1f 92       	push	r1
+  fe:	0f 92       	push	r0
+ 100:	0f b6       	in	r0, 0x3f	; 63
+ 102:	0f 92       	push	r0
+ 104:	11 24       	eor	r1, r1
+ 106:	2f 93       	push	r18
+ 108:	3f 93       	push	r19
+ 10a:	4f 93       	push	r20
+ 10c:	5f 93       	push	r21
+ 10e:	6f 93       	push	r22
+ 110:	7f 93       	push	r23
+ 112:	8f 93       	push	r24
+ 114:	9f 93       	push	r25
+ 116:	af 93       	push	r26
+ 118:	bf 93       	push	r27
+ 11a:	ef 93       	push	r30
+ 11c:	ff 93       	push	r31
+    GPIO_toggle(&PORTB, OUTPUT_MICRO);				// Switch (blink)
+ 11e:	65 e0       	ldi	r22, 0x05	; 5
+ 120:	85 e2       	ldi	r24, 0x25	; 37
+ 122:	90 e0       	ldi	r25, 0x00	; 0
+ 124:	0e 94 59 00 	call	0xb2	; 0xb2 <GPIO_toggle>
+}
+ 128:	ff 91       	pop	r31
+ 12a:	ef 91       	pop	r30
+ 12c:	bf 91       	pop	r27
+ 12e:	af 91       	pop	r26
+ 130:	9f 91       	pop	r25
+ 132:	8f 91       	pop	r24
+ 134:	7f 91       	pop	r23
+ 136:	6f 91       	pop	r22
+ 138:	5f 91       	pop	r21
+ 13a:	4f 91       	pop	r20
+ 13c:	3f 91       	pop	r19
+ 13e:	2f 91       	pop	r18
+ 140:	0f 90       	pop	r0
+ 142:	0f be       	out	0x3f, r0	; 63
+ 144:	0f 90       	pop	r0
+ 146:	1f 90       	pop	r1
+ 148:	18 95       	reti
 
-		 // Invert values (BLINK)
-		 GPIO_toggle(&PORTB, OUTPUT_MICRO); // Switch (blink)
-  f0:	65 e0       	ldi	r22, 0x05	; 5
-  f2:	85 e2       	ldi	r24, 0x25	; 37
-  f4:	90 e0       	ldi	r25, 0x00	; 0
-  f6:	0e 94 59 00 	call	0xb2	; 0xb2 <GPIO_toggle>
-  fa:	f1 cf       	rjmp	.-30     	; 0xde <main+0x14>
+0000014a <_exit>:
+ 14a:	f8 94       	cli
 
-000000fc <_exit>:
-  fc:	f8 94       	cli
-
-000000fe <__stop_program>:
-  fe:	ff cf       	rjmp	.-2      	; 0xfe <__stop_program>
+0000014c <__stop_program>:
+ 14c:	ff cf       	rjmp	.-2      	; 0x14c <__stop_program>
